@@ -49,3 +49,17 @@ SunlightClient.prototype.entityByName = function(search, type, callback) {
   };
   this.makeRequest('entities', params, callback);
 }
+
+SunlightClient.prototype.entityIdLookup = function(id, namespace, bioguide_id, callback) {
+  var params = {}
+  if (id && namespace) {
+    params.id = id;
+    params.namespace = namespace;
+  } else if (bioguide_id) {
+    params.bioguide_id = bioguide_id;
+  } else {
+    callback(new Error('Must supply either an id and namespace or bioguide_id'));
+  }
+
+  this.makeRequest('entities/id_lookup', params, callback);
+}
