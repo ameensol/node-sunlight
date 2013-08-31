@@ -1,0 +1,35 @@
+{
+  "name": "sunlight",
+  "version": "0.0.0",
+  "description": "node.js wrapper for Sunlight API",
+  "keywords": [
+    "sunlight",
+    "influence",
+    "congress",
+    "capitol",
+    "political"
+  ],
+  "author": "Ameen Soleimani (https://github.com/ameensol)",
+  "license": "MIT",
+  "dependencies": {
+    "querystring": "0.2.x",
+    "request": "2.25.x"
+  },
+  "devDependencies": {
+    "nconf": "~0.6.7"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ameensol/sunlight"
+  },
+  "main": "sunlight.js",
+  "engines": {
+    "node": "~0.10"
+  },
+  "bugs": {
+    "url": "https://github.com/ameensol/sunlight/issues",
+    "email": "ameen.sol@gmail.com"
+  },
+  "license": "MIT",
+  "readmeFilename": "README.md"
+}
