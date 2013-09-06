@@ -45,6 +45,8 @@ OpenStates.prototype.metadataOverview = function(callback) {
   this.makeRequest('metadata', params, callback);
 };
 
+
+
 OpenStates.prototype.billDetail = function(state, session, id, callback) {
   var params = {};
   id = encodeURIComponent(id);
@@ -55,3 +57,4 @@ OpenStates.prototype.legDetail = function(leg_id, callback) {
   var params ={};
   this.makeRequest('legislators/' + leg_id, params, callback);
 };
+
