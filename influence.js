@@ -18,6 +18,7 @@ Influence.prototype.createOptions = function(method, params, key) {
 
   return {
     url: 'http://transparencydata.org/api/1.0/' + method + '.json?' + 'apikey=' + key + "&" + query,
+    //timeout: 10000,
     agent: false,
     headers: {
       "User-Agent": "Mozilla/4.0 (compatible; sunlight node.js client)",
@@ -28,13 +29,23 @@ Influence.prototype.createOptions = function(method, params, key) {
 
 Influence.prototype.executeRequest = function(options, callback) {
   // executes the HTTP request with the given options
-  //console.log(options.url);
+  
+  /*
+  var timeout = 5000;
+
+  var timeoutID = setTimeout(function() {
+    console.log("zomg timeout");
+    return callback(new Error('Request timeout'));
+  }, timeout);
+  */
+
   request(options, function(err, res, body) {
-    //console.log(res);
+    // clearTimeout(timeoutID);
+    if (err) return callback(err);
     if (!err && res.statusCode == 200) {
-      callback(null, JSON.parse(body));
+      return callback(null, JSON.parse(body));
     } else {
-      callback(new Error('Request failed with ' + res.statusCode));
+      return callback(new Error('Request failed with ' + res.statusCode));
     }
   });
 }
@@ -97,9 +108,9 @@ Influence.prototype.topContributors = function(entity_id, cycle, limit, callback
   this.makeRequest('aggregates/pol/' + entity_id + '/contributors', params, callback);
 }
 
-Influence.prototype.topIndustries = function(entity_id, cycle, limit, callback) {
+Influence.prototype.topIndustries = function(entity_id, cycles, limit, callback) {
   var params = {
-    'cycle': cycle
+    'cycles': cycles
   };
   if (limit) params.limit = limit;
   this.makeRequest('aggregates/pol/' + entity_id + '/contributors/industries', params, callback);

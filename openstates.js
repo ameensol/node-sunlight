@@ -29,8 +29,18 @@ OpenStates.prototype.createOptions = function(method, params, key) {
 OpenStates.prototype.executeRequest = function(options, callback) {
   // executes the HTTP request with the given options
   //console.log(options.url);
+
+/*
+  var timeout = 10000;
+
+  var timeoutID = setTimeout(function() {
+    console.log("zomg timeout");
+    return callback(new Error('Request timeout'));
+  }, timeout);
+*/
+
   request(options, function(err, res, body) {
-    //console.log(res);
+    //clearTimeout(timeoutID);
     if (!err && res.statusCode == 200) {
       callback(null, JSON.parse(body));
     } else {
