@@ -2,6 +2,7 @@ var async = require('async');
 
 var Influence = require('./influence');
 var OpenStates = require('./openstates');
+var Congress = require('./congress');
 
 // Load apiKey from config.json - you can replace this code and manually set your API key here
 var nconf = require('nconf');
@@ -11,7 +12,7 @@ var apiKey = nconf.get('apiKey');
 
 var influence = new Influence(apiKey);
 var openstates = new OpenStates(apiKey);
-
+var congress = new Congress(apiKey);
 
 /*
 influence.entityByName('Barack Obama', 'politician', function(err, json) {
@@ -59,13 +60,36 @@ influence.topIndustries('4148b26f6f1c437cb50ea9ca4699417a', '2012', '1', functio
 */
 
 
+/*
+openstates.metadataOverview(function(err, json) {
+  console.log(json);
+});
+*/
+
+/*
+openstates.metadataState('nc', function(err, json) {
+  console.log(json);
+});
+*/
+
+/*
+openstates.billSearch({
+  q: 'agriculture',
+  state: 'ca',
+  chamber: 'upper'
+}, function(err, json) {
+  console.log(json);
+});
+*/
+
+/*
+openstates.billDetail('nc', '2013', 'HB 589', function(err, json) {
+  console.log(json);
+});
+*/
 
 /*
 openstates.legDetail('NCL000173', function(err, json) {
   console.log(json.full_name);
 });
 */
-
-openstates.metadataOverview(function(err, json) {
-  console.log(json);
-});

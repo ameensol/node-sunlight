@@ -17,7 +17,7 @@ OpenStates.prototype.createOptions = function(method, params, key) {
   var query = qs.stringify(params);
 
   return {
-    url: 'http://openstates.org/api/v1/' + method + '/?' + 'apikey=' + key,
+    url: 'http://openstates.org/api/v1/' + method + '/?' + 'apikey=' + key + '&' + query,
     agent: false,
     headers: {
       "User-Agent": "Mozilla/4.0 (compatible; sunlight node.js client)",
@@ -28,19 +28,9 @@ OpenStates.prototype.createOptions = function(method, params, key) {
 
 OpenStates.prototype.executeRequest = function(options, callback) {
   // executes the HTTP request with the given options
-  //console.log(options.url);
-
-/*
-  var timeout = 10000;
-
-  var timeoutID = setTimeout(function() {
-    console.log("zomg timeout");
-    return callback(new Error('Request timeout'));
-  }, timeout);
-*/
 
   request(options, function(err, res, body) {
-    //clearTimeout(timeoutID);
+    console.dir(options);
     if (!err && res.statusCode == 200) {
       callback(null, JSON.parse(body));
     } else {
@@ -49,12 +39,25 @@ OpenStates.prototype.executeRequest = function(options, callback) {
   });
 };
 
-
+// Get list of all states with data available and basic metadata about their status
 OpenStates.prototype.metadataOverview = function(callback) {
   var params = {};
   this.makeRequest('metadata', params, callback);
 };
 
+// Get detailed metadata for a particular state
+OpenStates.prototype.metadataState = function(state, callback) {
+  var params = {};
+  this.makeRequest('metadata/' + state, params, callback);
+};
+
+/* Search bills by (almost) any of their attributes, or full text
+   For possible params, go to http://sunlightlabs.github.io/openstates-api/bills.html#methods/bill-search
+*/
+OpenStates.prototype.billSearch = function(params, callback) {
+  console.log(params);
+  this.makeRequest('bills', params, callback);
+};
 
 
 OpenStates.prototype.billDetail = function(state, session, id, callback) {

@@ -18,7 +18,6 @@ Influence.prototype.createOptions = function(method, params, key) {
 
   return {
     url: 'http://transparencydata.org/api/1.0/' + method + '.json?' + 'apikey=' + key + "&" + query,
-    //timeout: 10000,
     agent: false,
     headers: {
       "User-Agent": "Mozilla/4.0 (compatible; sunlight node.js client)",
@@ -29,15 +28,6 @@ Influence.prototype.createOptions = function(method, params, key) {
 
 Influence.prototype.executeRequest = function(options, callback) {
   // executes the HTTP request with the given options
-  
-  /*
-  var timeout = 5000;
-
-  var timeoutID = setTimeout(function() {
-    console.log("zomg timeout");
-    return callback(new Error('Request timeout'));
-  }, timeout);
-  */
 
   request(options, function(err, res, body) {
     // clearTimeout(timeoutID);

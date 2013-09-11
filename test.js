@@ -77,7 +77,7 @@ billObj.prototype.aggVoteMoney = function(callback) {
             }
           });
         } else if (self.type == 'org') {
-          self.getOrgContrib(pol, function(err) {
+          self.getOrgContrib(pol, self.cycles, function(err) {
             if (err) {
               console.log(err);
               self.misses += 1;
@@ -88,7 +88,6 @@ billObj.prototype.aggVoteMoney = function(callback) {
             }
           });
         }
-
       });
     });
 
@@ -104,15 +103,12 @@ billObj.prototype.aggVoteMoney = function(callback) {
     console.log('Year: ' + self.cycles);
     console.log('\nHits: ' + self.hits + ' | Misses: '+ self.misses + '\n');
 
-    /*
-    console.log('**************' + self.name + ' Votes Money Sum******************');
-    console.dir(sortable);
-    */
+    // only see the first 20 donors
+    self.contrib = self.contrib.splice(0, 19);
 
     /*
-    Object.keys(self.indContrib).forEach(function(key) {
-      self.indContrib[key] = self.indContrib[key]/self.hits;
-    });
+    console.log('**************' + self.name + ' Votes Money Sum******************');
+    console.dir(self.contrib);
     */
 
     self.contrib.forEach(function (el) {
@@ -266,7 +262,7 @@ billObj.prototype.getIndContrib = function(pol, cb) {
             self.indContrib[el.name] = parseInt(el.amount);
           }
         } else if(self.type == 'org') {
-          if (el.name in self.indContrib) { 
+          if (el.name in self.orgContrib) { 
             self.orgContrib[el.name] += parseInt(el.amount);
           } else {
             self.orgContrib[el.name] = parseInt(el.amount);
@@ -281,44 +277,50 @@ billObj.prototype.getIndContrib = function(pol, cb) {
 }
 
 // Get the campaign contributions by organization
-billObj.prototype.getOrgContrib = function(pol, cb) {
+billObj.prototype.getOrgContrib = function(pol, cycles, cb) {
   var self = this;
   // console.dir(pol);
-  influence.topContributors(pol.id, self.cycles, null, function(err, json) {
-    if (err) {
-      return cb(new Error('Campaign Finance lookup ERROR for ' + pol.full_name + ' | err: ' + err.message));
-    }
-    if (json.length > 0) {
-
-      // increment the contrib object with these results
-      json.forEach(function(el, index, array) {
-        if (el.name in self.orgContrib) { 
-          self.orgContrib[el.name] += parseInt(el.amount);
-        } else {
-          self.orgContrib[el.name] = parseInt(el.amount);
-        }
-      });
-      return cb(null);
-    } else {
-      return cb(new Error('Campaign Finance lookup failed for ' + pol.full_name));
-    }
+  var foundData = false;
+  async.forEach(cycles, function(el, next) {
+    influence.topContributors(pol.id, el, null, function(err, json) {
+      if (err) {
+        return next(new Error('Campaign Finance lookup ERROR for ' + pol.full_name + ' | err: ' + err.message));
+      }
+      if (json.length > 0) {
+        foundData = true;
+        // increment the contrib object with these results
+        json.forEach(function(el, index, array) {
+          if (el.name in self.orgContrib) { 
+            self.orgContrib[el.name] += parseInt(el.total_amount);
+          } else {
+            self.orgContrib[el.name] = parseInt(el.total_amount);
+          }
+        });
+      }
+      return next(null);
+    });
+  }, function(err) {
+    if (err) return cb(err);
+    if (!foundData) return cb(new Error('Campaign Finance lookup failed for ' + pol.full_name + ' - ' + pol.id));
+    return cb(null);
   });
+  
 };
 
 // sort campaign finance results from largest to smallest
 billObj.prototype.sortResults = function(contrib) {
   var self = this;
   var sortable = [];
-  for (var contributor in self.indContrib)
-    sortable.push([contributor, self.indContrib[contributor]]);
+  for (var contributor in contrib)
+    sortable.push([contributor, contrib[contributor]]);
   sortable.sort(function(a, b) {return b[1] - a[1]});
   return sortable;
 };
 
 // Get the bill voting records
 
-var noData = new billObj('No', [2010, 2012]);
-var yesData = new billObj('Yes', [2010, 2012]);
+var noData = new billObj('No', [2010, 2012], 'org');
+var yesData = new billObj('Yes', [2010, 2012], 'org');
 
 var state = 'NC';
 
