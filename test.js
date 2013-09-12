@@ -319,8 +319,8 @@ billObj.prototype.sortResults = function(contrib) {
 
 // Get the bill voting records
 
-var noData = new billObj('No', [2010, 2012], 'org');
-var yesData = new billObj('Yes', [2010, 2012], 'org');
+var noData = new billObj('No', [2010, 2012]);
+var yesData = new billObj('Yes', [2010, 2012]);
 
 var state = 'NC';
 
