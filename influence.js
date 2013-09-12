@@ -8,6 +8,9 @@ var Influence = module.exports = function(apiKey) {
 
 Influence.prototype.makeRequest = function(method, params, callback) {
   // creates and executes an HTTP request 
+  if (typeof callback != 'function') {
+    throw new Error('callback must be a function');
+  }
   var options = this.createOptions(method, params, this.key);
   return this.executeRequest(options, callback);
 };
