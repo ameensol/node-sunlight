@@ -148,3 +148,32 @@ openstates.eventSearch({
 });
 */
 
+/*
+openstates.eventDetail('TXE00026474', function(err, json) {
+  if (err) throw err;
+  console.log(json);
+});
+*/
+
+/*
+// with the chamber
+openstates.districtSearch('nc', 'lower', function(err, json) {
+  if (err) throw err;
+  console.log(json);
+});
+*/
+
+/*
+// without the chamber
+openstates.districtSearch('nc', function(err, json) {
+  if (err) throw err;
+  console.log(json);
+});
+*/
+
+/*
+openstates.districtBoundary('sldl/nc-120', function(err, json) {
+  if (err) throw err;
+  console.log(json);
+});
+*/

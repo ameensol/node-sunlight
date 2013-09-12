@@ -39,6 +39,7 @@ OpenStates.prototype.executeRequest = function(options, callback) {
   });
 };
 
+
 // Get list of all states with data available and basic metadata about their status
 OpenStates.prototype.metadataOverview = function(callback) {
   var params = {};
@@ -112,7 +113,20 @@ OpenStates.prototype.eventDetail = function(event_id, callback) {
   this.makeRequest('events/' + event_id, params, callback);
 };
 
+// List districts for state (and optionally filtered by chamber)
+OpenStates.prototype.districtSearch = function(state, chamber, callback) {
+  var params = {};
+  var urlPattern = 'districts/' + state;
+  if (arguments.length == 2 && typeof arguments[1] == 'function') {
+    callback = chamber;
+  } else {
+    urlPattern = urlPattern + '/' + chamber;
+  }
+  this.makeRequest(urlPattern, params, callback);
+}
 
-/*var resource = params.resource;
-delete params.resource;
-this.makeRequest(params)*/
+// Get geographic boundary for a district
+OpenStates.prototype.districtBoundary = function(boundary_id, callback) {
+  var params = {};
+  this.makeRequest('districts/boundary/' + boundary_id, params, callback);
+};
