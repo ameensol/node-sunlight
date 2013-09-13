@@ -59,36 +59,30 @@ billObj.prototype.aggVoteMoney = function(callback) {
         self.misses += 1;
         return next();
       }
-      self.getId(pol, function(err, pol) {
-        if (err) {
-          console.log(err);
-          self.misses += 1;
-          return next();
-        }
-        if (self.type == 'ind') {
-          self.getIndContrib(pol, function(err) {
-            if (err) {
-              console.log(err);
-              self.misses += 1;
-              return next();
-            } else {
-              self.hits += 1;
-              return next();
-            }
-          });
-        } else if (self.type == 'org') {
-          self.getOrgContrib(pol, self.cycles, function(err) {
-            if (err) {
-              console.log(err);
-              self.misses += 1;
-              return next();
-            } else {
-              self.hits += 1;
-              return next();
-            }
-          });
-        }
-      });
+
+      if (self.type == 'ind') {
+        self.getIndContrib(pol, function(err) {
+          if (err) {
+            console.log(err);
+            self.misses += 1;
+            return next();
+          } else {
+            self.hits += 1;
+            return next();
+          }
+        });
+      } else if (self.type == 'org') {
+        self.getOrgContrib(pol, self.cycles, function(err) {
+          if (err) {
+            console.log(err);
+            self.misses += 1;
+            return next();
+          } else {
+            self.hits += 1;
+            return next();
+          }
+        });
+      }
     });
 
   }, function() {
@@ -128,118 +122,8 @@ billObj.prototype.getName = function(pol, cb) {
       return cb(new Error('Leg Detail lookup failed for ' + pol.leg_id));
     }
     pol.full_name = json.full_name;
+    pol.id = json.transparencydata_id;
     return cb(null, pol);
-  });
-};
-
-// Get the sunlight ID from the full name
-billObj.prototype.getId = function(pol, cb) {
-  var self = this;
-
-  self.setPosNames(pol, function (possibleNames) {
-
-    async.forEach(possibleNames, function (el, next) {
-
-      influence.entityByName(el, 'politician', function (err, json) {
-
-        // Unsuccessful query
-        if (err || typeof json == 'undefined') {
-          return next();
-        }
-
-        // Successful query
-        if (json.length > 0) {
-          var id = null;
-          if (json.length > 1) {
-            json.forEach(function(el) {
-              if (el.state == 'NC') {
-                pol.id = el.id;
-              }
-            });
-          } else {
-            pol.id = json[0].id;
-          }
-        }
-        return next();
-
-      });
-    }, function(err) {
-      if(err) return cb(err);
-      if(pol && pol.id) return cb(null, pol);
-      return cb(new Error('ID lookup failed for: ' + pol.full_name));
-    });
-  });
-
-};
-
-// Creates a list of possible names to lookup for each politician
-billObj.prototype.setPosNames = function (pol, cb) {
-  var self = this;
-  var possibleNames = [pol.full_name];
-
-  async.parallel([
-    function(callback) {
-      // middle name
-      self.removeMiddle(pol.full_name, function (firstLast) {
-        if (firstLast) {
-          possibleNames.push(firstLast);
-          pol.firstLast = firstLast;
-        }
-        return callback();
-      });
-    }, function(callback) {
-      // first name variant
-      self.tryVariant(pol.full_name, function (firstVariant) {
-        if (firstVariant) {
-          possibleNames.push(firstVariant);
-          pol.firstVariant = firstVariant;
-        }
-        return callback();
-      });
-  }], function() {
-    // middle name and first name variant
-    if (pol.firstLast && pol.firstVariant) {
-      self.tryVariantLast(pol.firstVariant, function (firstVariantLast) {
-        possibleNames.push(firstVariantLast);
-        pol.firstVariantLast = firstVariantLast;
-      });
-    }
-  });
-  console.log(possibleNames);
-  cb(possibleNames);
-};
-
-// If the politician has a middle name, try removing it
-billObj.prototype.removeMiddle = function (full_name, CB) {
-  if (full_name.split(' ').length > 2) {
-    firstLast = full_name.split(' ')[0] + ' ' + full_name.split(' ')[2];
-    CB(firstLast);
-  } else {
-    CB(null);
-  }
-};
-
-// Try a variant of the first name
-billObj.prototype.tryVariant = function(full_name, CB) {
-  var firstVariant = null;
-  var splitName = full_name.split(' ');
-  firstName = splitName.shift();
-  nameVariants.names.forEach(function(el) {
-    if (firstName == el[0]) {
-      nameVariant = el[1];
-      splitName.unshift(nameVariant);
-      firstVariant = splitName.join(' ');
-    }
-  });
-  if (firstVariant) return CB(firstVariant);
-  return CB(null);
-}; 
-
-// Try removing the middle name and using a first name variant
-billObj.prototype.tryVariantLast = function(firstVariant, CB) {
-  this.removeMiddle(firstVariant, function(firstVariantLast) {
-    if (firstVariantLast) return CB(firstVariantLast);
-    return CB(null);
   });
 };
 
@@ -319,8 +203,8 @@ billObj.prototype.sortResults = function(contrib) {
 
 // Get the bill voting records
 
-var noData = new billObj('No', [2010, 2012]);
-var yesData = new billObj('Yes', [2010, 2012]);
+var noData = new billObj('No', [2010, 2012], 'org');
+var yesData = new billObj('Yes', [2010, 2012], 'org');
 
 var state = 'NC';
 

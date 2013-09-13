@@ -15,7 +15,8 @@
     "querystring": "0.2.x",
     "request": "2.25.x",
     "async": "0.2.x",
-    "sunlight-congress-api": "x"
+    "sunlight-congress-api": "x",
+    "openstates": "x"
   },
   "devDependencies": {
     "nconf": "~0.6.7"
