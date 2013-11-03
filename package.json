@@ -1,6 +1,6 @@
 {
   "name": "sunlight-influence",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "node.js wrapper for Sunlight API",
   "keywords": [
     "sunlight",
@@ -22,7 +22,7 @@
     "type": "git",
     "url": "https://github.com/ameensol/sunlight"
   },
-  "main": "sunlight.js",
+  "main": "influence.js",
   "engines": {
     "node": "~0.10"
   },
