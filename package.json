@@ -13,12 +13,7 @@
   "license": "MIT",
   "dependencies": {
     "querystring": "0.2.x",
-    "request": "2.25.x",
-    "async": "0.2.x",
-    "sunlight-congress-api": "x",
-    "openstates": "0.0.1",
-    "d3": "x",
-    "connect": "x"
+    "request": "2.25.x"
   },
   "devDependencies": {
     "nconf": "~0.6.7"

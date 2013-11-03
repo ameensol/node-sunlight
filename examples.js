@@ -48,19 +48,19 @@ influence.topPoliticians('2006', null, function(err, json) {
 */
 
 
-/*
-influence.topContributors('4148b26f6f1c437cb50ea9ca4699417a', '2012', '1', function(err, json) {
-  if (err) throw err;
-  console.log(json);
-});
-*/
 
-/*
-influence.topIndustries('4148b26f6f1c437cb50ea9ca4699417a', '2012', '1', function(err, json) {
+influence.topContributors('4148b26f6f1c437cb50ea9ca4699417a', '2012', null, function(err, json) {
   if (err) throw err;
   console.log(json);
 });
-*/
+
+
+
+influence.topIndustries('4148b26f6f1c437cb50ea9ca4699417a', '2012', null, function(err, json) {
+  if (err) throw err;
+  console.log(json);
+});
+
 
 /*
 influence.unknownIndustries('4148b26f6f1c437cb50ea9ca4699417a', '2012', '1', function(err, json) {
