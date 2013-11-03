@@ -1,5 +1,5 @@
 {
-  "name": "sunlight",
+  "name": "sunlight-influence",
   "version": "0.0.0",
   "description": "node.js wrapper for Sunlight API",
   "keywords": [
@@ -16,7 +16,9 @@
     "request": "2.25.x",
     "async": "0.2.x",
     "sunlight-congress-api": "x",
-    "openstates": "x"
+    "openstates": "0.0.1",
+    "d3": "x",
+    "connect": "x"
   },
   "devDependencies": {
     "nconf": "~0.6.7"

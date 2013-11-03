@@ -1,8 +1,6 @@
 var async = require('async');
 
 var Influence = require('./influence');
-var OpenStates = require('openstates');
-var Congress = require('./congress');
 
 // Load apiKey from config.json - you can replace this code and manually set your API key here
 var nconf = require('nconf');
@@ -11,8 +9,6 @@ nconf.load();
 var apiKey = nconf.get('apiKey');
 
 var influence = new Influence(apiKey);
-var openstates = new OpenStates(apiKey);
-var congress = new Congress(apiKey);
 
 /*
 influence.entityByName('Barack Obama', 'politician', function(err, json) {
@@ -29,8 +25,8 @@ influence.entityIdLookup(null, null, 'L000551', function(err, json) {
 });
 */
 
-/*
 // Using id and namespace
+/*
 influence.entityById(TODO, TODO, null, function(err, json) {
   if (err) throw err;
   console.log(json);
@@ -65,3 +61,17 @@ influence.topIndustries('4148b26f6f1c437cb50ea9ca4699417a', '2012', '1', functio
   console.log(json);
 });
 */
+
+/*
+influence.unknownIndustries('4148b26f6f1c437cb50ea9ca4699417a', '2012', '1', function(err, json) {
+  if (err) throw err;
+  console.log(json);
+});
+*/
+
+
+
+
+
+
+

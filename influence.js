@@ -74,8 +74,6 @@ Influence.prototype.entityIdLookup = function(id, namespace, bioguide_id, callba
   this.makeRequest('entities/id_lookup', params, callback);
 }
 
-
-
 Influence.prototype.entityOverview = function(entity_id, cycles, callback) {
 
   var params = {};
@@ -93,6 +91,9 @@ Influence.prototype.topPoliticians = function(cycle, limit, callback) {
 }
 
 
+// The top contributing organizations to a given candidate. Giving is broken down into money given directly
+// (by the organization's PAC), versus money given by individuals employed by or associated with the organization.
+
 Influence.prototype.topContributors = function(entity_id, cycle, limit, callback) {
   var params = {
     'cycle': cycle
@@ -101,7 +102,17 @@ Influence.prototype.topContributors = function(entity_id, cycle, limit, callback
   this.makeRequest('aggregates/pol/' + entity_id + '/contributors', params, callback);
 }
 
+// Top contributing industries, ranked by dollars given.
 Influence.prototype.topIndustries = function(entity_id, cycles, limit, callback) {
+  var params = {
+    'cycles': cycles
+  };
+  if (limit) params.limit = limit;
+  this.makeRequest('aggregates/pol/' + entity_id + '/contributors/industries', params, callback);
+}
+
+// Contribution count and total for a politician from unknown industries
+Influence.prototype.unknownIndustries = function(entity_id, cycles, limit, callback) {
   var params = {
     'cycles': cycles
   };
