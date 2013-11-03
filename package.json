@@ -1,6 +1,6 @@
 {
   "name": "sunlight-influence",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "node.js wrapper for Sunlight API",
   "keywords": [
     "sunlight",
